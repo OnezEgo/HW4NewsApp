@@ -1,11 +1,9 @@
 package com.example.android.newsapplication;
 
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
+import org.json.JSONException;
 
 /**
  * Created by Fast_Balls on 7/28/2017.
@@ -30,9 +28,7 @@ public class JsonUtilities {
             Article newsItem = new Article(author, title, description, url, imgUrl, published);
             results.add(newsItem);
         }
-
         //parses json and returns an arraylist or articles with the information from the json
-
         return results;
     }
 }

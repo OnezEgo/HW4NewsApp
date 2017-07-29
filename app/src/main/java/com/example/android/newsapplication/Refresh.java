@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import com.example.android.newsapplication.data.DBHelper;
 import com.example.android.newsapplication.data.DatabaseUtilities;
 
-
 /**
  * Created by Fast_Balls on 7/28/2017.
  */

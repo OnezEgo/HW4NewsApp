@@ -1,11 +1,12 @@
 package com.example.android.newsapplication.data;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import com.example.android.newsapplication.Article;
 import java.util.ArrayList;
 import static com.example.android.newsapplication.data.Contract.TABLE_ARTICLES.*;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 
 /**
  * Created by Fast_Balls on 7/28/2017.
@@ -25,7 +26,6 @@ public class DatabaseUtilities {
         );
         return cursor;
     }
-
     // insert multiple items at once
     public static void bulkInsert(SQLiteDatabase db, ArrayList<Article> articles){
         db.beginTransaction();
@@ -46,8 +46,6 @@ public class DatabaseUtilities {
             db.close();
         }
     }
-
-
     public static void deleteAll(SQLiteDatabase db){
         db.delete(TABLE_NAME, null, null);
     }

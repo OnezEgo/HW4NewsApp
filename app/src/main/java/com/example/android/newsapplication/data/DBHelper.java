@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-
 /**
  * Created by Fast_Balls on 7/28/2017.
  */
@@ -16,7 +15,6 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = "dbhelper";
 
     // create the table at give it the nessasary conditions
-
     public DBHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -32,7 +30,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 Contract.TABLE_ARTICLES.COLUMN_NAME_URL + " TEXT, " +
                 Contract.TABLE_ARTICLES.COLUMN_NAME_URL_TO_IMAGE + " TEXT" +
                 "); ";
-
         Log.d(TAG, "Creating SQL table: " + queryString);
         db.execSQL(queryString);
     }
@@ -41,5 +38,4 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //db.execSQL("drop table " + Contract.TABLE_ARTICLES.TABLE_NAME + " if exists;");
     }
-
 }

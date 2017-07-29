@@ -2,48 +2,41 @@ package com.example.android.newsapplication;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.database.Cursor;
+import android.support.v7.widget.LinearLayoutManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
-
+import android.support.v4.content.AsyncTaskLoader;
 import com.example.android.newsapplication.data.Contract;
 import com.example.android.newsapplication.data.DBHelper;
 import com.example.android.newsapplication.data.DatabaseUtilities;
 
-
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Void>, MyAdapter.NewsClickListener{
     static final String TAG = "mainactivity";
-
     private RecyclerView rv;
     private ProgressBar progress;
     private Cursor cursor;
     private SQLiteDatabase db;
     private MyAdapter adapter;
-
     private static final int NEWS_LOADER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         progress = (ProgressBar) findViewById(R.id.progressBar);
         rv = (RecyclerView) findViewById(R.id.recyclerView);
-
         rv.setLayoutManager(new LinearLayoutManager(this));
 
       // checks to see if this app has been installed previously, and if not calls to restart loader
@@ -124,8 +117,6 @@ public class MainActivity extends AppCompatActivity
         rv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
-
 
     @Override
     public void onNewsClick(Cursor cursor, int clickedItem){
