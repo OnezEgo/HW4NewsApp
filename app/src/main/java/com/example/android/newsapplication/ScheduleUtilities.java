@@ -2,7 +2,6 @@ package com.example.android.newsapplication;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import com.example.android.newsapplication.NewsJob;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -27,26 +26,18 @@ public class ScheduleUtilities {
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
 
+        // sets the job service to run, and then identifies the job by the tag
+        //adds constraint for spcification as to when the job can run, and for how long
+        // also provieds information as to the job like if it should reoccur and how offten or for how long
         Job constraintRefreshJob = dispatcher.newJobBuilder()
-                //sets what Job service to run for the dispatcher
                 .setService(NewsJob.class)
-                //set the tag to identify the job
                 .setTag(NEWS_JOB_TAG)
-                //runtime when a job is eligible to start running, in this case, it's when the user
-                //has internet available
                 .setConstraints(Constraint.ON_ANY_NETWORK)
-                //sets when the job should be executed, in this case, forever
                 .setLifetime(Lifetime.FOREVER)
-                //tells if the job should reoccur, in this case, yes
                 .setRecurring(true)
-                //the range where the job should trigger, from a starting period to a respectable amount
-                //afterwards; in this case set it to be exactly 1 min (give or take a few secs off)
                 .setTrigger(Trigger.executionWindow(SCHEDULE_INTERVAL_MINUTES, SCHEDULE_INTERVAL_MINUTES))
-                //asks if this job should replace previous jobs with the same tag (i.e. NEWS_JOB_TAG)
                 .setReplaceCurrent(true)
-                //builds the job with all the settings specificed above
                 .build();
-
         dispatcher.schedule(constraintRefreshJob);
         sInitialized = true;
     }

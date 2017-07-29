@@ -4,6 +4,8 @@ package com.example.android.newsapplication;
  * Created by Fast_Balls on 7/28/2017.
  */
 
+// a model of the article object to store information
+
 public class Article {
     private String author;
     private String title;

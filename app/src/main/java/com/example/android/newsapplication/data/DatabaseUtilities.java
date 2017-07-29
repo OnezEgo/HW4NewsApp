@@ -12,7 +12,7 @@ import static com.example.android.newsapplication.data.Contract.TABLE_ARTICLES.*
  */
 
 public class DatabaseUtilities {
-    //Query that gets all the items in the table and sort them by the most recent updates
+    //get all articles in the database and sort them by time published
     public static Cursor getAll(SQLiteDatabase db) {
         Cursor cursor = db.query(
                 TABLE_NAME,
@@ -26,7 +26,7 @@ public class DatabaseUtilities {
         return cursor;
     }
 
-    //easier way to insert multiple articles into the db
+    // insert multiple items at once
     public static void bulkInsert(SQLiteDatabase db, ArrayList<Article> articles){
         db.beginTransaction();
         try{
@@ -47,7 +47,7 @@ public class DatabaseUtilities {
         }
     }
 
-    //completely deletes the table and all of its values
+
     public static void deleteAll(SQLiteDatabase db){
         db.delete(TABLE_NAME, null, null);
     }

@@ -1,6 +1,5 @@
 package com.example.android.newsapplication;
 
-import com.example.android.newsapplication.Article;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +31,7 @@ public class JsonUtilities {
             results.add(newsItem);
         }
 
+        //parses json and returns an arraylist or articles with the information from the json
 
         return results;
     }

@@ -1,8 +1,6 @@
 package com.example.android.newsapplication;
 
 import android.net.Uri;
-import android.util.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -11,9 +9,10 @@ import java.net.URL;
 import java.util.Scanner;
 
 /**
- * Created by Fast_Balls on 7/28/2017.
+ * Created by Fast_Balls on 7/10/2017.
  */
 
+//this class was created in the previous hw assignment hw2
 public final class NetworkUtilities {
     private static final String NEWS_BASE_URL = "https://newsapi.org/v1/articles?source=the-next-web&sortBy=latest&apiKey=70162993d91646eb8a647c0c4276186f";
 
@@ -33,14 +32,6 @@ public final class NetworkUtilities {
         return url;
     }
 
-
-    /**
-     * This method returns the entire result from the HTTP response.
-     *
-     * @param url The URL to fetch the HTTP response from.
-     * @return The contents of the HTTP response.
-     * @throws IOException Related to network and stream reading
-     */
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {

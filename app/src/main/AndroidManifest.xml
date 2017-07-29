@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.newsapplication">
 
+
+    <!---Added Permission for the internet and the service to reload-->
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application

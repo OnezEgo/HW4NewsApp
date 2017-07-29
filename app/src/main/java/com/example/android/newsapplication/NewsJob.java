@@ -12,15 +12,15 @@ import com.firebase.jobdispatcher.JobParameters;
 public class NewsJob extends JobService {
     private AsyncTask mBackgroundTask;
 
-    //initial method when the job gets called which will run on the main thread
+    //main method that the service calls
     @Override
     public boolean onStartJob(final JobParameters job){
         mBackgroundTask = new AsyncTask() {
 
             @Override
             protected void onPreExecute(){
-                //Notifies the user that the activity has automatically refreshed
                 Toast.makeText(NewsJob.this, "News has been refreshed.", Toast.LENGTH_SHORT).show();
+                // creates a toast the lets the user know the backgrond task has been completed
                 super.onPreExecute();
             }
             @Override
@@ -31,7 +31,6 @@ public class NewsJob extends JobService {
 
             @Override
             protected void onPostExecute(Object o){
-                //indicates job completion
                 jobFinished(job, false);
                 super.onPostExecute(o);
             }
@@ -39,8 +38,7 @@ public class NewsJob extends JobService {
         mBackgroundTask.execute();
         return true;
     }
-
-    //stops the job within constraints specified
+    // stops the job passed in the args
     @Override
     public boolean onStopJob(JobParameters job){
         if (mBackgroundTask != null){

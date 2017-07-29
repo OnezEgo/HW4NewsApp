@@ -22,15 +22,14 @@ import android.widget.ProgressBar;
 import com.example.android.newsapplication.data.Contract;
 import com.example.android.newsapplication.data.DBHelper;
 import com.example.android.newsapplication.data.DatabaseUtilities;
-import com.example.android.newsapplication.Refresh;
-import com.example.android.newsapplication.ScheduleUtilities;
+
 
 public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Void>, MyAdapter.NewsClickListener{
     static final String TAG = "mainactivity";
 
-    private RecyclerView recyclerView;
-    private ProgressBar bar;
+    private RecyclerView rv;
+    private ProgressBar progress;
     private Cursor cursor;
     private SQLiteDatabase db;
     private MyAdapter adapter;
@@ -42,27 +41,22 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bar = (ProgressBar) findViewById(R.id.progressBar);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        progress = (ProgressBar) findViewById(R.id.progressBar);
+        rv = (RecyclerView) findViewById(R.id.recyclerView);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        rv.setLayoutManager(new LinearLayoutManager(this));
 
-        //Checks if the app has been installed before
+      // checks to see if this app has been installed previously, and if not calls to restart loader
+        // job dispacher refreshes to get new articles every minute
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isFirst = sp.getBoolean("isfirst", true);
-
-        //if it hasn't been installed, calls to restart the loader while marking
         if(isFirst){
             load();
             SharedPreferences.Editor editor = sp.edit();
             editor.putBoolean("isfirst", false);
             editor.commit();
         }
-
-        //Schedules the job dispatcher to refresh for any new articles posted (still calls it if
-        //there aren't any, however)
         ScheduleUtilities.scheduleRefresh(this);
-
     }
 
     @Override
@@ -71,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         db = new DBHelper(MainActivity.this).getReadableDatabase();
         cursor = DatabaseUtilities.getAll(db);
         adapter = new MyAdapter(cursor, this);
-        recyclerView.setAdapter(adapter);
+        rv.setAdapter(adapter);
     }
 
     @Override
@@ -79,37 +73,6 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
         db.close();
         cursor.close();
-    }
-
-    public Loader<Void> onCreateLoader(int id, final Bundle args){
-        return new AsyncTaskLoader<Void>(this) {
-
-            //Equivalent to AsyncTask's onPreExecute method
-            @Override
-            public void onStartLoading(){
-                super.onStartLoading();
-                bar.setVisibility(View.VISIBLE);
-            }
-
-            //Equivalent to AsyncTask's doInBackGround method
-            @Override
-            public Void loadInBackground() {
-                Refresh.fetchArticles(MainActivity.this);
-                return null;
-            }
-        };
-    }
-
-    //Equivalent to AsyncTask's onPostExecute method
-    @Override
-    public void onLoadFinished(Loader<Void> loader, Void data){
-        bar.setVisibility(View.GONE);
-        db = new DBHelper(MainActivity.this).getReadableDatabase();
-        cursor = DatabaseUtilities.getAll(db);
-
-        adapter = new MyAdapter(cursor, this);
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -131,16 +94,44 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public Loader<Void> onCreateLoader(int id, final Bundle args){
+        return new AsyncTaskLoader<Void>(this) {
+
+            //implementing all the required callbacks
+            @Override
+            public void onStartLoading(){
+                super.onStartLoading();
+                progress.setVisibility(View.VISIBLE);
+            }
+
+            //implementing all the required callbacks
+            @Override
+            public Void loadInBackground() {
+                Refresh.fetchArticles(MainActivity.this);
+                return null;
+            }
+        };
+    }
+
+    //implementing all the required callbacks
+    @Override
+    public void onLoadFinished(Loader<Void> loader, Void data){
+        progress.setVisibility(View.GONE);
+        db = new DBHelper(MainActivity.this).getReadableDatabase();
+        cursor = DatabaseUtilities.getAll(db);
+
+        adapter = new MyAdapter(cursor, this);
+        rv.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+
+
     @Override
     public void onNewsClick(Cursor cursor, int clickedItem){
-        //moves the cursor to the clicked item
         cursor.moveToPosition(clickedItem);
-
-        //get the url link of the item the user has tapped
+        //stores the url of the article chosen and the proceeds to open the article in the browser
         String url = cursor.getString(cursor.getColumnIndex(Contract.TABLE_ARTICLES.COLUMN_NAME_URL));
-        Log.d(TAG, String.format("URL: %s", url));
-
-        //opens up the url link to the article via the user's browser
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
